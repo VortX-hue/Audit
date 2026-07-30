@@ -92,12 +92,13 @@ export default function Home() {
     const duration = 700;
     const start = performance.now();
     const from = 0;
+    const targetScore = score; // narrow once, outside the closure
 
     let frame: number;
     function tick(now: number) {
       const progress = Math.min(1, (now - start) / duration);
       const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
-      setDisplayScore(Math.round((from + (score - from) * eased) * 10) / 10);
+      setDisplayScore(Math.round((from + (targetScore - from) * eased) * 10) / 10);
       if (progress < 1) {
         frame = requestAnimationFrame(tick);
       }
