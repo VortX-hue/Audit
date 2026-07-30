@@ -89,7 +89,7 @@ export default function Home() {
       setDisplayScore(0);
       return;
     }
-    const duration = 700;
+const duration = 700;
     const start = performance.now();
     const from = 0;
     const targetScore = score; // narrow once, outside the closure
