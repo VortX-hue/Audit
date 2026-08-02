@@ -1,5 +1,4 @@
-// src/app/api/paypal/verify-subscription/route.ts
-
+// app/api/paypal/verify-subscription/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
@@ -13,37 +12,45 @@ export async function POST(req: NextRequest) {
 
   const { subscriptionID } = await req.json();
   if (!subscriptionID) {
-    return NextResponse.json({ error: "Missing subscriptionID." }, { status: 400 });
+    return NextResponse.json({ error: "Missing subscription ID." }, { status: 400 });
   }
 
   try {
-    // Never trust the client — ask PayPal directly what this subscription's
-    // real status is.
+    // Never trust the client's claim that payment succeeded — always
+    // re-check the subscription's real status directly with PayPal.
     const subscription = await getPayPalSubscription(subscriptionID);
 
     const isActive = subscription.status === "ACTIVE";
+    const matchesProPlan = subscription.plan_id === process.env.PAYPAL_PRO_PLAN_ID;
+
+    if (!isActive || !matchesProPlan) {
+      return NextResponse.json(
+        { error: "Subscription could not be verified.", plan: "free" },
+        { status: 400 }
+      );
+    }
 
     const { error: dbError } = await supabase.from("subscriptions").upsert({
       user_id: userId,
-      plan: isActive ? "pro" : "free",
       paypal_subscription_id: subscriptionID,
-      status: subscription.status,
+      plan_id: subscription.plan_id,
+      status: "active",
       updated_at: new Date().toISOString(),
     });
 
     if (dbError) {
-      console.error("Failed to save subscription:", dbError.message);
+      console.error("Failed to persist subscription:", dbError.message);
       return NextResponse.json(
-        { error: "Payment verified, but we couldn't save your plan. Contact support." },
+        { error: "Subscription verified but couldn't be saved. Contact support." },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({ plan: isActive ? "pro" : "free", status: subscription.status });
+    return NextResponse.json({ plan: "pro" });
   } catch (err) {
-    console.error(err);
+    console.error("Subscription verification failed:", err);
     return NextResponse.json(
-      { error: "Couldn't verify subscription with PayPal." },
+      { error: "Something went wrong verifying your subscription." },
       { status: 500 }
     );
   }

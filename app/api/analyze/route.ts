@@ -7,10 +7,49 @@ type Flag = {
   suggestion: string;
 };
 
+const FREE_MONTHLY_AUDIT_LIMIT = 3;
+
 export async function POST(req: NextRequest) {
   const { userId } = await auth();
   if (!userId) {
     return NextResponse.json({ error: "Not signed in." }, { status: 401 });
+  }
+
+  // --- Free-tier enforcement ---
+  // Check Pro status first; only count against the limit if the user
+  // isn't Pro, since Pro is unlimited.
+  const { data: subscription } = await supabase
+    .from("subscriptions")
+    .select("status")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  const isPro = subscription?.status === "active";
+
+  if (!isPro) {
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    const { count, error: countError } = await supabase
+      .from("audits")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", userId)
+      .gte("created_at", startOfMonth.toISOString());
+
+    if (countError) {
+      console.error("Failed to check audit count:", countError.message);
+      // Fail open rather than blocking a paying customer's flow over a
+      // transient DB read error — but log it for visibility.
+    } else if ((count ?? 0) >= FREE_MONTHLY_AUDIT_LIMIT) {
+      return NextResponse.json(
+        {
+          error: `You've used all ${FREE_MONTHLY_AUDIT_LIMIT} free audits this month. Upgrade to Pro for unlimited audits.`,
+          limitReached: true,
+        },
+        { status: 403 }
+      );
+    }
   }
 
   const { url } = await req.json();
@@ -37,7 +76,6 @@ export async function POST(req: NextRequest) {
       const flags: Flag[] = [];
       const description = (p.body_html || "").replace(/<[^>]*>/g, "").trim();
 
-      // Placeholder / unfinished content check
       if (/lorem ipsum|TODO|placeholder text/i.test(description)) {
         flags.push({
           flag: "Description contains placeholder text",
@@ -46,7 +84,6 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      // Inventory check
       const allOutOfStock =
         p.variants && p.variants.length > 0 && p.variants.every((v: any) => v.available === false);
       if (allOutOfStock) {
@@ -57,7 +94,6 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      // Weight check (affects shipping calculations)
       const missingWeight =
         p.variants && p.variants.length > 0 && p.variants.every((v: any) => !v.grams || v.grams === 0);
       if (missingWeight) {
@@ -68,7 +104,6 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      // URL handle check
       if (p.handle && /^\d+$/.test(p.handle.replace(/-/g, ""))) {
         flags.push({
           flag: "Product URL looks auto-generated (bad for SEO)",
@@ -79,7 +114,6 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      // Description checks
       if (!description) {
         flags.push({
           flag: "Missing description",
@@ -93,7 +127,6 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      // Title / SEO checks
       if (!p.title || p.title.length < 10) {
         flags.push({
           flag: "Title may be too short",
@@ -130,13 +163,11 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      // Duplicate title detection
       const key = (p.title || "").toLowerCase().trim();
       if (key) {
         seenTitles.set(key, (seenTitles.get(key) || 0) + 1);
       }
 
-      // Image checks
       if (!p.images || p.images.length === 0) {
         flags.push({
           flag: "No product images",
@@ -160,7 +191,6 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // Pricing checks
       const variant = p.variants?.[0];
       const price = parseFloat(variant?.price || "0");
       const compareAt = parseFloat(variant?.compare_at_price || "0");
@@ -196,7 +226,6 @@ export async function POST(req: NextRequest) {
       };
     });
 
-    // Mark duplicates after the loop
     const final = analyzed.map((p: any) => {
       const key = (p.title || "").toLowerCase().trim();
       if (key && (seenTitles.get(key) || 0) > 1) {
@@ -215,7 +244,6 @@ export async function POST(req: NextRequest) {
       return p;
     });
 
-    // Calculate an overall store health score (out of 10)
     const maxFlagsPerProduct = 6;
     const totalPossible = final.length * maxFlagsPerProduct;
     const totalFlags = final.reduce((sum: number, p: any) => sum + p.flags.length, 0);

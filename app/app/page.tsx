@@ -83,6 +83,26 @@ export default function Home() {
     };
   }, []);
 
+  // Check real Pro status from the server on mount — isPro used to only
+  // live in client state, which meant it reset to false on every page
+  // refresh even for paying customers. This reads the persisted status
+  // from Supabase instead.
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/subscription/status")
+      .then((res) => (res.ok ? res.json() : { isPro: false }))
+      .then((data) => {
+        if (!cancelled) setIsPro(!!data.isPro);
+      })
+      .catch(() => {
+        /* silent — falls back to showing the upgrade prompt, which is
+           the safe default if we can't confirm Pro status */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   // Animate score counting up whenever a new score lands
   useEffect(() => {
     if (score === null) {
