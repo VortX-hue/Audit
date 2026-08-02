@@ -89,7 +89,7 @@ export default function Home() {
       setDisplayScore(0);
       return;
     }
-const duration = 700;
+    const duration = 700;
     const start = performance.now();
     const from = 0;
     const targetScore = score; // narrow once, outside the closure
@@ -242,8 +242,8 @@ const duration = 700;
             style={{
               padding: "12px 16px",
               borderRadius: 10,
-              background: "#111",
-              color: "#fff",
+              background: "var(--color-invert-bg)",
+              color: "var(--color-invert-text)",
               fontSize: 13.5,
               fontWeight: 600,
               boxShadow: "0 8px 24px rgba(0,0,0,0.18)",
@@ -286,7 +286,7 @@ const duration = 700;
                   padding: "8px 16px",
                   background: "transparent",
                   color: "var(--color-muted)",
-                  border: "1px solid #e4e4e7",
+                  border: "1px solid var(--color-line)",
                   borderRadius: 10,
                   fontWeight: 600,
                   fontSize: 13,
@@ -294,7 +294,7 @@ const duration = 700;
                   transition: "background 0.15s, border-color 0.15s",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#f4f4f5";
+                  e.currentTarget.style.background = "var(--color-hover)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = "transparent";
@@ -310,8 +310,8 @@ const duration = 700;
               <button
                 style={{
                   padding: "8px 16px",
-                  background: "#111",
-                  color: "#fff",
+                  background: "var(--color-invert-bg)",
+                  color: "var(--color-invert-text)",
                   border: "none",
                   borderRadius: 10,
                   fontWeight: 600,
@@ -335,7 +335,7 @@ const duration = 700;
         {/* --- TEMPORARY: PayPal test section --- */}
         <div
           style={{
-            background: "#fff",
+            background: "var(--color-card)",
             borderRadius: 16,
             padding: 20,
             marginBottom: 30,
@@ -370,8 +370,8 @@ const duration = 700;
               display: "inline-block",
               padding: "6px 14px",
               borderRadius: 999,
-              background: "#111",
-              color: "#fff",
+              background: "var(--color-invert-bg)",
+              color: "var(--color-invert-text)",
               fontSize: 12,
               fontWeight: 600,
               letterSpacing: 0.5,
@@ -401,7 +401,7 @@ const duration = 700;
             display: "flex",
             gap: 10,
             marginBottom: 30,
-            background: "#fff",
+            background: "var(--color-card)",
             padding: 10,
             borderRadius: 16,
             boxShadow: "0 1px 3px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.04)",
@@ -434,8 +434,8 @@ const duration = 700;
               fontWeight: 600,
               borderRadius: 10,
               border: "none",
-              background: loading ? "#3f3f46" : "#111",
-              color: "#fff",
+              background: loading ? "#3f3f46" : "var(--color-invert-bg)",
+              color: "var(--color-invert-text)",
               cursor: loading ? "default" : "pointer",
               whiteSpace: "nowrap",
               transition: "transform 0.1s, background 0.15s",
@@ -456,7 +456,7 @@ const duration = 700;
           <div
             className="fade-in-up"
             style={{
-              background: "#fff",
+              background: "var(--color-card)",
               borderRadius: 14,
               padding: "18px 20px",
               marginBottom: 20,
@@ -471,7 +471,7 @@ const duration = 700;
                 width: 16,
                 height: 16,
                 borderRadius: "50%",
-                border: "2px solid #e4e4e7",
+                border: "2px solid var(--color-line)",
                 borderTopColor: "var(--color-accent)",
                 animation: "spin 0.7s linear infinite",
               }}
@@ -500,7 +500,7 @@ const duration = 700;
             className="fade-in-up"
             style={{
               color: "var(--color-bad)",
-              background: "#fef2f2",
+              background: "var(--color-error-bg)",
               padding: 14,
               borderRadius: 10,
               marginBottom: 20,
@@ -525,7 +525,7 @@ const duration = 700;
               style={{
                 padding: "26px 28px",
                 borderRadius: 16,
-                background: "#fff",
+                background: "var(--color-card)",
                 boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
               }}
             >
@@ -550,7 +550,7 @@ const duration = 700;
                 }}
               >
                 {displayScore.toFixed(1)}
-                <span style={{ fontSize: 18, color: "#a1a1aa" }}>/10</span>
+                <span style={{ fontSize: 18, color: "var(--color-muted)" }}>/10</span>
               </p>
               <p style={{ color: "var(--color-muted)", fontSize: 14, marginTop: 4 }}>
                 {products.length} products · {cleanCount} clean
@@ -563,7 +563,7 @@ const duration = 700;
                 style={{
                   padding: "20px 24px",
                   borderRadius: 16,
-                  background: "#fff",
+                  background: "var(--color-card)",
                   boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
                 }}
               >
@@ -600,14 +600,14 @@ const duration = 700;
                 fontSize: 13,
                 fontWeight: 600,
                 borderRadius: 8,
-                border: "1px solid #e4e4e7",
-                background: "#fff",
+                border: "1px solid var(--color-line)",
+                background: "var(--color-card)",
                 color: "var(--color-ink)",
                 cursor: "pointer",
                 transition: "background 0.15s",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "#f4f4f5")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "#fff")}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-hover)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "var(--color-card)")}
             >
               ↓ Export CSV
             </button>
@@ -625,7 +625,7 @@ const duration = 700;
                   borderRadius: 14,
                   padding: 20,
                   marginBottom: 12,
-                  background: "#fff",
+                  background: "var(--color-card)",
                   animationDelay: `${Math.min(i * 30, 300)}ms`,
                   animationFillMode: "backwards",
                 }}
@@ -655,7 +655,7 @@ const duration = 700;
                               border: "none",
                               padding: 0,
                               cursor: "pointer",
-                              color: "#b91c1c",
+                              color: "var(--color-bad)",
                               fontSize: 14,
                             }}
                           >
@@ -665,7 +665,7 @@ const duration = 700;
                                 transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
                                 transition: "transform 0.15s",
                                 fontSize: 12,
-                                color: "#a1a1aa",
+                                color: "var(--color-muted)",
                               }}
                             >
                               ▶
@@ -679,9 +679,9 @@ const duration = 700;
                                 marginTop: 6,
                                 marginLeft: 18,
                                 padding: "10px 12px",
-                                background: "#fafafa",
+                                background: "var(--color-hover)",
                                 borderRadius: 8,
-                                color: "#3f3f46",
+                                color: "var(--color-ink)",
                                 fontSize: 13.5,
                                 lineHeight: 1.5,
                                 borderLeft: "3px solid #d1d5db",
@@ -709,7 +709,7 @@ const duration = 700;
           <div className="fade-in-up" style={{ marginTop: 10 }}>
             <div
               style={{
-                background: "#fff",
+                background: "var(--color-card)",
                 borderRadius: 16,
                 padding: 28,
                 boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
@@ -756,7 +756,7 @@ const duration = 700;
                       justifyContent: "space-between",
                       alignItems: "center",
                       padding: "14px 18px",
-                      background: "#fff",
+                      background: "var(--color-card)",
                       borderRadius: 12,
                       marginBottom: 8,
                       border: "1px solid var(--color-line)",

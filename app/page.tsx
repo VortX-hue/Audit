@@ -49,8 +49,8 @@ export default function LandingPage() {
               display: "inline-block",
               padding: "6px 14px",
               borderRadius: 999,
-              background: "#111",
-              color: "#fff",
+              background: "var(--color-invert-bg)",
+              color: "var(--color-invert-text)",
               fontSize: 12,
               fontWeight: 600,
               letterSpacing: 0.5,
@@ -90,8 +90,8 @@ export default function LandingPage() {
               fontSize: 16,
               fontWeight: 700,
               borderRadius: 12,
-              background: "#111",
-              color: "#fff",
+              background: "var(--color-invert-bg)",
+              color: "var(--color-invert-text)",
               textDecoration: "none",
               boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
             }}
@@ -103,7 +103,7 @@ export default function LandingPage() {
         {/* Score preview mock */}
         <div
           style={{
-            background: "#fff",
+            background: "var(--color-card)",
             borderRadius: 16,
             padding: "26px 28px",
             marginBottom: 80,
@@ -125,7 +125,7 @@ export default function LandingPage() {
                 color: "var(--color-warn)",
               }}
             >
-              6.4<span style={{ fontSize: 18, color: "#a1a1aa" }}>/10</span>
+              6.4<span style={{ fontSize: 18, color: "var(--color-muted)" }}>/10</span>
             </p>
           </div>
           <div style={{ textAlign: "right", color: "var(--color-muted)", fontSize: 14 }}>
@@ -153,7 +153,7 @@ export default function LandingPage() {
                 <div
                   key={title}
                   style={{
-                    background: "#fff",
+                    background: "var(--color-card)",
                     borderRadius: 14,
                     padding: 20,
                     border: "1px solid var(--color-line)",
@@ -171,7 +171,7 @@ export default function LandingPage() {
 
         {/* How it works */}
         <ScrollReveal>
-          <div style={{ marginBottom: 80 }}>
+          <div id="how-it-works" style={{ marginBottom: 80 }}>
             <p
               style={{
                 fontSize: 13,
@@ -220,7 +220,7 @@ export default function LandingPage() {
 
         {/* Pricing */}
         <ScrollReveal>
-          <div style={{ marginBottom: 80 }}>
+          <div id="pricing" style={{ marginBottom: 80 }}>
             <p
               style={{
                 fontSize: 13,
@@ -236,7 +236,7 @@ export default function LandingPage() {
               {/* Free */}
               <div
                 style={{
-                  background: "#fff",
+                  background: "var(--color-card)",
                   borderRadius: 16,
                   padding: 28,
                   border: "1px solid var(--color-line)",
@@ -271,10 +271,10 @@ export default function LandingPage() {
               {/* Pro */}
               <div
                 style={{
-                  background: "#111",
+                  background: "var(--color-invert-bg)",
                   borderRadius: 16,
                   padding: 28,
-                  color: "#fff",
+                  color: "var(--color-invert-text)",
                   position: "relative",
                 }}
               >
@@ -294,11 +294,11 @@ export default function LandingPage() {
                 >
                   POPULAR
                 </span>
-                <p style={{ fontSize: 14, fontWeight: 700, color: "#a1a1aa", marginBottom: 8 }}>
+                <p style={{ fontSize: 14, fontWeight: 700, color: "var(--color-invert-muted)", marginBottom: 8 }}>
                   PRO
                 </p>
                 <p style={{ fontSize: 32, fontWeight: 800, marginBottom: 20, fontFamily: "var(--font-mono)" }}>
-                  $19<span style={{ fontSize: 15, color: "#a1a1aa" }}>/mo</span>
+                  $19<span style={{ fontSize: 15, color: "var(--color-invert-muted)" }}>/mo</span>
                 </p>
                 <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                   {PRO_FEATURES.map((f) => (
@@ -324,7 +324,7 @@ export default function LandingPage() {
 
         {/* FAQ */}
         <ScrollReveal>
-          <div style={{ marginBottom: 80 }}>
+          <div id="faq" style={{ marginBottom: 80 }}>
             <p
               style={{
                 fontSize: 13,
@@ -338,7 +338,7 @@ export default function LandingPage() {
             </p>
             <div
               style={{
-                background: "#fff",
+                background: "var(--color-card)",
                 borderRadius: 16,
                 padding: "4px 24px",
                 border: "1px solid var(--color-line)",
@@ -353,18 +353,18 @@ export default function LandingPage() {
         <ScrollReveal>
           <div
             style={{
-              background: "#111",
+              background: "var(--color-invert-bg)",
               borderRadius: 16,
               padding: "32px 28px",
               textAlign: "center",
-              color: "#fff",
+              color: "var(--color-invert-text)",
               marginBottom: 40,
             }}
           >
             <p style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>
               Run your first audit free
             </p>
-            <p style={{ fontSize: 14, color: "#a1a1aa", marginBottom: 24 }}>
+            <p style={{ fontSize: 14, color: "var(--color-invert-muted)", marginBottom: 24 }}>
               No install. No permissions. Results in seconds.
             </p>
             <Link
@@ -375,8 +375,8 @@ export default function LandingPage() {
                 fontSize: 14,
                 fontWeight: 700,
                 borderRadius: 10,
-                background: "#fff",
-                color: "#111",
+                background: "var(--color-invert-text)",
+                color: "var(--color-invert-bg)",
                 textDecoration: "none",
               }}
             >
